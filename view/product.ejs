@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Management System</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container mt-4">
+        <h1>Product Management System</h1>
+        
+        <!-- Form to add a new product -->
+        <form action="/api/products" method="POST">
+            <div class="form-group">
+                <label for="productCode">Product Code</label>
+                <input type="text" class="form-control" id="productCode" name="productCode" required>
+            </div>
+            <div class="form-group">
+                <label for="productName">Product Name</label>
+                <input type="text" class="form-control" id="productName" name="productName" required>
+            </div>
+            <div class="form-group">
+                <label for="productOriginPrice">Origin Price</label>
+                <input type="number" class="form-control" id="productOriginPrice" name="productOriginPrice" required>
+            </div>
+            <div class="form-group">
+                <label for="quantity">Quantity</label>
+                <input type="number" class="form-control" id="quantity" name="quantity" required>
+            </div>
+            <div class="form-group">
+                <label for="productStoreCode">Store Code</label>
+                <input type="text" class="form-control" id="productStoreCode" name="productStoreCode" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Add Product</button>
+        </form>
+
+        <hr>
+
+        <!-- List of products -->
+        <h2>Products</h2>
+        <ul class="list-group">
+            <% products.forEach(product => { %>
+                <li class="list-group-item">
+                    <%= product.productName %> - <%= product.productOriginPrice %> - <%= product.quantity %>
+                    <form action="/api/products/<%= product._id %>?_method=DELETE" method="POST" style="display: inline;">
+                        <button type="submit" class="btn btn-danger btn-sm float-right">Delete</button>
+                    </form>
+                </li>
+            <% }); %>
+        </ul>
+    </div>
+
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
