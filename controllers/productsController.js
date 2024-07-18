@@ -1,41 +1,50 @@
 const Product = require('../models/Product');
 
-// Other controller methods using Product
-exports.getAllProducts = async (req, res) => {
+module.exports = {
+  // Get all products
+  async index(req, res) {
     try {
-        const products = await Product.find();
-        res.render('products', { products }); // Render view with products
+      const products = await Product.find();
+      res.render('products/index', { products });
     } catch (err) {
-        res.status(500).json({ message: err.message });
+      console.error(err);
+      res.status(500).send("Server Error");
     }
-};
+  },
 
-exports.createProduct = async (req, res) => {
-    const { productCode, productName, productOriginPrice, quantity, productStoreCode } = req.body;
-    try {
-        const product = new Product({
-            productCode,
-            productName,
-            productOriginPrice,
-            quantity,
-            productStoreCode
-        });
-        await product.save();
-        res.status(201).json(product);
-    } catch (err) {
-        res.status(400).json({ message: err.message });
-    }
-};
+  // Show form to create new product
+  newProduct(req, res) {
+    res.render('products/new');
+  },
 
-exports.deleteProduct = async (req, res) => {
-    const { id } = req.params;
+  // Create a new product
+  async create(req, res) {
     try {
-        const deletedProduct = await Product.findByIdAndDelete(id);
-        if (!deletedProduct) {
-            return res.status(404).json({ message: 'Product not found' });
-        }
-        res.json({ message: 'Product deleted successfully' });
+      const { productCode, productName, productDate, productOriginPrice, quantity, productStoreCode } = req.body;
+      const product = new Product({
+        productCode,
+        productName,
+        productDate,
+        productOriginPrice,
+        quantity,
+        productStoreCode,
+      });
+      await product.save();
+      res.redirect('/products');
     } catch (err) {
-        res.status(500).json({ message: err.message });
+      console.error(err);
+      res.status(500).send("Server Error");
     }
+  },
+
+  // Delete a product
+  async delete(req, res) {
+    try {
+      await Product.findByIdAndDelete(req.params.id);
+      res.redirect('/products');
+    } catch (err) {
+      console.error(err);
+      res.status(500).send("Server Error");
+    }
+  },
 };

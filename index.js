@@ -1,30 +1,28 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const mongoose = require('mongoose');
+const methodOverride = require('method-override');
+
+// Initialize database connection
+require('./models/database');
+
 const app = express();
-const PORT = process.env.PORT || 3000;
 
 // Middleware
-app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-app.set('view engine', 'ejs'); // Set EJS as view engine
-
-// Connect to MongoDB
-mongoose.connect('mongodb://localhost/product-management', {
-    useNewUrlParser: true,
-    useUnifiedTopology: true
-});
-const db = mongoose.connection;
-db.on('error', console.error.bind(console, 'MongoDB connection error:'));
-db.once('open', () => {
-    console.log('Connected to MongoDB: product-management');
-});
+app.use(methodOverride('_method'));
+app.set('view engine', 'ejs');
 
 // Routes
-const productsRouter = require('./routes/products.route');
-app.use('/api/products', productsRouter);
+const productRoutes = require('./routes/products.route');
+app.use('/products', productRoutes);
 
-// Start server
-app.listen(PORT, () => {
-    console.log(`Server is running on http://localhost:${PORT}`);
+// Home route
+
+app.get('/', (req, res) => {
+  res.redirect('/products');
+});
+
+const port = process.env.PORT || 4261;
+app.listen(port, () => {
+  console.log(`Server is running on http://localhost:${port}`);
 });

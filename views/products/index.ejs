@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <title>Products</title>
+</head>
+<body>
+  <div class="container mt-5">
+    <h1>Products</h1>
+    <a href="/products/new" class="btn btn-primary mb-3">Add New Product</a>
+    <table class="table table-bordered">
+      <thead>
+        <tr>
+          <th>Product Code</th>
+          <th>Product Name</th>
+          <th>Product Date</th>
+          <th>Origin Price</th>
+          <th>Quantity</th>
+          <th>Store Code</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% products.forEach(product => { %>
+        <tr>
+          <td><%= product.productCode %></td>
+          <td><%= product.productName %></td>
+          <td><%= product.productDate.toISOString().substring(0, 10) %></td>
+          <td><%= product.productOriginPrice %></td>
+          <td><%= product.quantity %></td>
+          <td><%= product.productStoreCode %></td>
+          <td>
+            <form action="/products/<%= product._id %>?_method=DELETE" method="POST">
+              <button type="submit" class="btn btn-danger">Delete</button>
+            </form>
+          </td>
+        </tr>
+        <% }) %>
+      </tbody>
+    </table>
+  </div>
+</body>
+</html>
